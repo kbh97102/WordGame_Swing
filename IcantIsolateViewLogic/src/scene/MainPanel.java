@@ -46,15 +46,15 @@ public class MainPanel extends PanelArray {
 
 
         titlePanel.add(titleLabel);
-
-
-
         buttonPanel.add(startButton);
         buttonPanel.add(wordManageButton);
         buttonPanel.add(exitButton);
-        //add
+
+        titlePanel.setBackground(Color.ORANGE);
+        buttonPanel.setBackground(Color.ORANGE);
         contentPanel.add(titlePanel, BorderLayout.NORTH);
         contentPanel.add(buttonPanel, BorderLayout.CENTER);
+
         //Event
         startButton.addActionListener(event -> sceneChange.accept(Scene.LEVELSELECT));
         wordManageButton.addActionListener(event -> sceneChange.accept(Scene.WORDMANAGE));

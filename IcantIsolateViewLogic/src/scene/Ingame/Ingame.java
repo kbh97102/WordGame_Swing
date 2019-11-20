@@ -33,6 +33,7 @@ public class Ingame extends PanelArray {
 
     private ScorePanel scp;
     private LifePanel lp;
+    private JButton backToMain;
     public Ingame(){
 
         init();
@@ -85,6 +86,7 @@ public class Ingame extends PanelArray {
         //contentPanel.add(btn, BorderLayout.WEST);
 
         //Event
+        backToMain.addActionListener(event -> sceneChange.accept(Scene.MAIN));
         btn.addActionListener(event -> sceneChange.accept(Scene.MAIN));
         userInputTF.addActionListener(text->{
             String input = userInputTF.getText();
@@ -93,12 +95,11 @@ public class Ingame extends PanelArray {
                 testLabel.setText(generateWord());
                 scp.scoreIncrease();
             }
-
-
         });
     }
     private void init(){
         //panel
+        backToMain = new JButton("BackToMain");
         scp = new ScorePanel();
         lp = new LifePanel();
         contentPanel = new JPanel();
@@ -139,5 +140,6 @@ public class Ingame extends PanelArray {
         reStartButton = new JButton("Restart");
         toolBar.add(pauseButton);
         toolBar.add(reStartButton);
+        toolBar.add(backToMain);
     }
 }

@@ -71,6 +71,8 @@ public class WordManagerWindow extends PanelArray{
         jSplitPane.setLeftComponent(displayPanel);
         jSplitPane.setRightComponent(editPanel);
         jSplitPane.resetToPreferredSizes();
+
+        contentPanel.setBackground(Color.ORANGE);
         contentPanel.add(jSplitPane);
     }
     private void init(){

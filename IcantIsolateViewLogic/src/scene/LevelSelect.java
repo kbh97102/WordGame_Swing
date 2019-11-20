@@ -31,13 +31,15 @@ public class LevelSelect extends PanelArray{
 
         levelTitle.setIcon(new ImageIcon("./src/Image/leveltitleImage.png"));
         levelTitle.setHorizontalAlignment(JLabel.CENTER);
-        buttonPanel.add(new JPanel());
+        buttonPanel.add(new JLabel());
         buttonPanel.add(b1.getEasyPanel());
-        buttonPanel.add(new JPanel());
+        buttonPanel.add(new JLabel());
         buttonPanel.add(b2.getEasyPanel());
-        buttonPanel.add(new JPanel());
+        buttonPanel.add(new JLabel());
         buttonPanel.add(b3.getEasyPanel());
-        buttonPanel.add(new JPanel());
+        buttonPanel.add(new JLabel());
+
+
 
         contentPanel.add(levelTitle, BorderLayout.NORTH);
         contentPanel.add(buttonPanel, BorderLayout.CENTER);
