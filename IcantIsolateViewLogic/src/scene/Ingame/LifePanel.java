@@ -14,6 +14,7 @@ public class LifePanel {
 
     public LifePanel(){
         lifePanel = new JPanel();
+        lifePanel.setLayout(new GridLayout(2,1));
 
         lifeIntPanel = new JLabel(Integer.toString(currentLife));
         lifeIntPanel.setFont(new Font("바탕",Font.BOLD, 30));

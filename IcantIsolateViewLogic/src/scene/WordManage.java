@@ -7,8 +7,8 @@ public class WordManage {
 
     private static WordManage wordManageInstance;
     private Vector<String> wordData;
-    private static String wordFilePath;
-    private String tempPath = "D:\\WordGame\\src\\my\\word.txt";
+    private static String wordFilePath = "./word.txt";
+    //private String tempPath = "D:\\WordGame\\src\\my\\word.txt";
 
     public WordManage() {
         readFromFile();
@@ -31,13 +31,16 @@ public class WordManage {
         }
     }
     private void readFromFile() {
-        wordData = readFile(tempPath);
+        wordData = readFile(wordFilePath);
     }
     public void replaceWordData(Vector<String> newData){
         wordData = newData;
     }
 
-    public void saveFile(String path, Vector<String> wordData){
+    public void saveWordToFile(){
+        saveFile(wordFilePath, wordData);
+    }
+    private void saveFile(String path, Vector<String> wordData){
         File file = new File(path);
 
         StringBuilder stringBuilder = new StringBuilder();

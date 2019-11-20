@@ -1,14 +1,13 @@
 package scene.Ingame;
 
-import core.Main;
 import core.MainFrame;
 import scene.PanelArray;
 import scene.Scene;
 import scene.WordManage;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.util.Vector;
 
 public class Ingame extends PanelArray {
 
@@ -32,31 +31,58 @@ public class Ingame extends PanelArray {
     private JToolBar toolBar;
     private JButton pauseButton;
     private JButton reStartButton;
+    private JPanel forLifeAndUserImage;
 
     public Ingame(){
 
         init();
-        wordData = WordManage.getInstance().getWordData();
+
         userInputTF.requestFocus();
         setToolBar();
         //test
-
         testLabel = new JLabel(generateWord());
-        //add
+
+        //layout
         ingameMainPanel.setLayout(new BorderLayout());
+        ingameRightPanel.setLayout(new BorderLayout());
+        forLifeAndUserImage.setLayout(new BorderLayout());
+
+        ingameRightPanel.setPreferredSize(new Dimension(320, 720));
+        scorePanel.setPreferredSize(new Dimension(320, 180));
+        lifePanel.setPreferredSize(new Dimension(320, 180));
+        userImagePanel.setPreferredSize(new Dimension(320, 350));
+
+
+        //sort
+//        scorePanel.
+        //background
+        ingameMainPanel.setBackground(new Color(240,255,240));
+        lifePanel.setBackground(new Color(230,230,255));
+        scorePanel.setBackground(new Color(240,255,240));
+        //edge
+        scorePanel.setBorder(BorderFactory.createLineBorder(Color.GREEN.brighter().brighter(), 1));
+        lifePanel.setBorder(BorderFactory.createLineBorder(Color.BLUE.brighter().brighter(), 1));
+        userImagePanel.setBorder(new LineBorder(Color.GREEN, 1));
+//        userInputTF.setBorder(new LineBorder(Color.GRAY, 1));
+
+        userInputTF.setPreferredSize(new Dimension(ingameMainPanel.getWidth(),50));
+        userInputTF.setFont(new Font("굴림", Font.BOLD, 20));
+
+
+        //add
+
         ingameMainPanel.add(userInputTF, BorderLayout.SOUTH);
         ingameMainPanel.add(testLabel, BorderLayout.NORTH);
 
-        ingameRightPanel.setLayout(new GridLayout(3,1));
-        ingameRightPanel.add(scorePanel);
-        ingameRightPanel.add(lifePanel);
-        ingameRightPanel.add(userImagePanel);
+        ingameRightPanel.add(scorePanel, BorderLayout.NORTH);
+        ingameRightPanel.add(forLifeAndUserImage, BorderLayout.CENTER);
+        forLifeAndUserImage.add(lifePanel, BorderLayout.NORTH);
+        //ingameRightPanel.add(userImagePanel, BorderLayout.CENTER);
 
         contentPanel.add(ingameRightPanel, BorderLayout.EAST);
         contentPanel.add(ingameMainPanel, BorderLayout.CENTER);
         contentPanel.add(toolBar, BorderLayout.NORTH);
-
-        contentPanel.add(btn, BorderLayout.WEST);
+        //contentPanel.add(btn, BorderLayout.WEST);
 
         //Event
         btn.addActionListener(event -> sceneChange.accept(Scene.MAIN));
@@ -79,6 +105,7 @@ public class Ingame extends PanelArray {
         lifePanel = lp.getLifePanel();
         userImagePanel = new JPanel();
         userImagePanel.setBackground(Color.ORANGE);
+        forLifeAndUserImage = new JPanel();
 
         //ingameMainPanel
         userInputTF = new JTextField(30);
@@ -95,9 +122,14 @@ public class Ingame extends PanelArray {
 //        return selectedWord;
 //    }
     public String generateWord(){
+        wordData = WordManage.getInstance().getWordData();
         int randomIndex = (int)(Math.random()*wordData.size());
         String word = wordData.get(randomIndex);
+        for(int i=0;i<wordData.size();i++){
+            System.out.println(wordData.get(i)+"ingame");
+        }
         return word;
+
     }
     public void changeGoalCount(int goalCount){
         this.goalCount = goalCount;

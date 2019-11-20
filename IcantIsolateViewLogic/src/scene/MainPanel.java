@@ -2,6 +2,7 @@ package scene;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.Vector;
 
 public class MainPanel extends PanelArray {
@@ -23,20 +24,34 @@ public class MainPanel extends PanelArray {
     public MainPanel() {
         init();
 
-        //수정
-        titleLabel.setText("Word Game");
-        titleLabel.setFont(new Font("바탕", Font.BOLD, 70));
-        titleLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        titlePanel.add(new JLabel());
+
+        //imageIcon
+        titleLabel.setIcon(new ImageIcon("./src/Image/titleImage.png"));
+        startButton.setIcon(new ImageIcon("./src/Image/startImage.png"));
+        wordManageButton.setIcon(new ImageIcon("./src/Image/wordManageImage.png"));
+        exitButton.setIcon(new ImageIcon("./src/Image/exitImage.png"));
+
+        startButton.setBorderPainted(false);
+        startButton.setContentAreaFilled(false);
+        startButton.setFocusPainted(false);
+
+        wordManageButton.setBorderPainted(false);
+        wordManageButton.setContentAreaFilled(false);
+        wordManageButton.setFocusPainted(false);
+
+        exitButton.setBorderPainted(false);
+        exitButton.setContentAreaFilled(false);
+        exitButton.setFocusPainted(false);
+
+
         titlePanel.add(titleLabel);
-        titlePanel.add(new JLabel());
+
 
 
         buttonPanel.add(startButton);
         buttonPanel.add(wordManageButton);
         buttonPanel.add(exitButton);
-        //titleLabel.setBounds(320,50 , 640, 180);
         //add
         contentPanel.add(titlePanel, BorderLayout.NORTH);
         contentPanel.add(buttonPanel, BorderLayout.CENTER);
@@ -55,13 +70,13 @@ public class MainPanel extends PanelArray {
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(3, 1));
         titlePanel = new JPanel();
-        titlePanel.setLayout(new GridLayout(1, 3));
+        titleLabel = new JLabel();
+//        titlePanel.setLayout(new GridLayout(1, 3));
         contentPanel.setLayout(new BorderLayout());
         wordData = new Vector<>();
-        startButton = new JButton("START");
-        wordManageButton = new JButton("WORDMANAGE");
-        exitButton = new JButton("EXIT");
-        titleLabel = new JLabel("Drop the Word");
-        titleLabel.setFont(new Font("바탕", Font.BOLD, 45));
+        startButton = new JButton();
+        wordManageButton = new JButton();
+        exitButton = new JButton();
+//        titleLabel = new JLabel("Drop the Word");
     }
 }

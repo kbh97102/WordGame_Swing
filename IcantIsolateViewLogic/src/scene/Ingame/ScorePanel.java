@@ -15,6 +15,7 @@ public class ScorePanel {
 
     public ScorePanel(){
         scorePanel = new JPanel();
+        scorePanel.setLayout(new GridLayout(2,1));
         currentScore = DEFAULT_SCORE;
         scoreIntLabel = new JLabel(Integer.toString(currentScore));
         scoreIntLabel.setFont(new Font("바탕", Font.BOLD, 30));
