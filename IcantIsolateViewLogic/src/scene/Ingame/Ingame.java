@@ -29,12 +29,16 @@ public class Ingame extends PanelArray {
     private int currentGoalCount=0;
     private JButton btn;
 
+    private JToolBar toolBar;
+    private JButton pauseButton;
+    private JButton reStartButton;
+
     public Ingame(){
 
         init();
         wordData = WordManage.getInstance().getWordData();
         userInputTF.requestFocus();
-
+        setToolBar();
         //test
 
         testLabel = new JLabel(generateWord());
@@ -51,6 +55,7 @@ public class Ingame extends PanelArray {
         contentPanel.add(ingameRightPanel, BorderLayout.EAST);
         contentPanel.add(ingameMainPanel, BorderLayout.CENTER);
         contentPanel.add(btn, BorderLayout.WEST);
+        contentPanel.add(toolBar, BorderLayout.NORTH);
 
         //Event
         btn.addActionListener(event -> sceneChange.accept(Scene.MAIN));
@@ -99,5 +104,11 @@ public class Ingame extends PanelArray {
     public void currentGoalCountIncrease(){
         currentGoalCount++;
     }
-
+    public void setToolBar(){
+        toolBar = new JToolBar();
+        pauseButton = new JButton("pause");
+        reStartButton = new JButton("Restart");
+        toolBar.add(pauseButton);
+        toolBar.add(reStartButton);
+    }
 }
