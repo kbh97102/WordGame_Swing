@@ -36,18 +36,17 @@ public class EasyButton {
 
 
         buttonContentPanel.setLayout(new GridLayout(9,1,0,5));
-        buttonContentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK ,1));
+        //buttonContentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK ,1));
         buttonContentPanel.add(difficultyButton);
         buttonContentPanel.add(blindOption);
         buttonContentPanel.add(speedOption);
         buttonContentPanel.add(healWordOption);
         buttonContentPanel.add(bestScore);
-        buttonContentPanel.add(new JPanel());
-        buttonContentPanel.add(new JPanel());
-        buttonContentPanel.add(new JPanel());
-        buttonContentPanel.add(new JPanel());
+        buttonContentPanel.add(new JLabel());
+        buttonContentPanel.add(new JLabel());
+        buttonContentPanel.add(new JLabel());
 
-        buttonContentPanel.setBackground(Color.BLACK);
+        buttonContentPanel.setBackground(Color.ORANGE);
 
     }
 
@@ -61,5 +60,8 @@ public class EasyButton {
     }
     public JPanel getEasyPanel(){
         return buttonContentPanel;
+    }
+    public JButton getButton(){
+        return difficultyButton;
     }
 }

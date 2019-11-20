@@ -24,8 +24,6 @@ public class Ingame extends PanelArray {
 
     private JTextField userInputTF;
 
-    private int goalCount=10;
-    private int currentGoalCount=0;
     private JButton btn;
 
     private JToolBar toolBar;
@@ -33,6 +31,8 @@ public class Ingame extends PanelArray {
     private JButton reStartButton;
     private JPanel forLifeAndUserImage;
 
+    private ScorePanel scp;
+    private LifePanel lp;
     public Ingame(){
 
         init();
@@ -89,14 +89,18 @@ public class Ingame extends PanelArray {
         userInputTF.addActionListener(text->{
             String input = userInputTF.getText();
             userInputTF.setText("");
-            testLabel.setText(generateWord());
+            if(input.equals(testLabel.getText())){
+                testLabel.setText(generateWord());
+                scp.scoreIncrease();
+            }
+
 
         });
     }
     private void init(){
         //panel
-        ScorePanel scp = new ScorePanel();
-        LifePanel lp = new LifePanel();
+        scp = new ScorePanel();
+        lp = new LifePanel();
         contentPanel = new JPanel();
         ingameMainPanel = new JPanel();
         ingameRightPanel = new JPanel();
@@ -125,18 +129,10 @@ public class Ingame extends PanelArray {
         wordData = WordManage.getInstance().getWordData();
         int randomIndex = (int)(Math.random()*wordData.size());
         String word = wordData.get(randomIndex);
-        for(int i=0;i<wordData.size();i++){
-            System.out.println(wordData.get(i)+"ingame");
-        }
-        return word;
 
+        return word;
     }
-    public void changeGoalCount(int goalCount){
-        this.goalCount = goalCount;
-    }
-    public void currentGoalCountIncrease(){
-        currentGoalCount++;
-    }
+
     public void setToolBar(){
         toolBar = new JToolBar();
         pauseButton = new JButton("pause");

@@ -10,8 +10,8 @@ public class ScorePanel {
     private JLabel scoreIntLabel;
     private int currentScore;
     private final int DEFAULT_SCORE = 0;
-    private int scoreIncreasement = 1;
-    private int scoreDecreasement = 1;
+    private int scoreIncreasement = 5;
+    private int scoreDecreasement = 5;
 
     public ScorePanel(){
         scorePanel = new JPanel();
@@ -32,6 +32,7 @@ public class ScorePanel {
 
     public void scoreIncrease(){
         currentScore += scoreIncreasement;
+        scoreIntLabel.setText(Integer.toString(currentScore));
     }
     public void scoreDecrease(){
         currentScore -= scoreDecreasement;
