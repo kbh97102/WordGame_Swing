@@ -6,7 +6,7 @@ import java.util.Vector;
 
 public class MainPanel extends PanelArray {
 
-    private  MainPanel mainPanelInstance;
+    private MainPanel mainPanelInstance;
 
     private JLabel titleLabel;
     private JButton startButton;
@@ -20,7 +20,7 @@ public class MainPanel extends PanelArray {
     private JPanel titlePanel;
 
 
-    public MainPanel(){
+    public MainPanel() {
         init();
 
         //수정
@@ -33,7 +33,6 @@ public class MainPanel extends PanelArray {
         titlePanel.add(new JLabel());
 
 
-
         buttonPanel.add(startButton);
         buttonPanel.add(wordManageButton);
         buttonPanel.add(exitButton);
@@ -42,27 +41,27 @@ public class MainPanel extends PanelArray {
         contentPanel.add(titlePanel, BorderLayout.NORTH);
         contentPanel.add(buttonPanel, BorderLayout.CENTER);
         //Event
-        startButton.addActionListener(event ->{
-            sceneChange.accept(Scene.LEVELSELECT);
-        });
+        startButton.addActionListener(event -> sceneChange.accept(Scene.LEVELSELECT));
+        wordManageButton.addActionListener(event -> sceneChange.accept(Scene.WORDMANAGE));
         exitButton.addActionListener(event -> onExit.run());
     }
-    public void addOnExit(Runnable onExit){
+
+    public void addOnExit(Runnable onExit) {
         this.onExit = onExit;
     }
 
-    private void init(){
+    private void init() {
         contentPanel = new JPanel();
         buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(3,1));
+        buttonPanel.setLayout(new GridLayout(3, 1));
         titlePanel = new JPanel();
-        titlePanel.setLayout(new GridLayout(1,3));
+        titlePanel.setLayout(new GridLayout(1, 3));
         contentPanel.setLayout(new BorderLayout());
         wordData = new Vector<>();
         startButton = new JButton("START");
         wordManageButton = new JButton("WORDMANAGE");
         exitButton = new JButton("EXIT");
         titleLabel = new JLabel("Drop the Word");
-        titleLabel.setFont(new Font("바탕",Font.BOLD, 45));
+        titleLabel.setFont(new Font("바탕", Font.BOLD, 45));
     }
 }

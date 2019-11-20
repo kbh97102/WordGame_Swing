@@ -54,8 +54,9 @@ public class Ingame extends PanelArray {
 
         contentPanel.add(ingameRightPanel, BorderLayout.EAST);
         contentPanel.add(ingameMainPanel, BorderLayout.CENTER);
-        contentPanel.add(btn, BorderLayout.WEST);
         contentPanel.add(toolBar, BorderLayout.NORTH);
+
+        contentPanel.add(btn, BorderLayout.WEST);
 
         //Event
         btn.addActionListener(event -> sceneChange.accept(Scene.MAIN));

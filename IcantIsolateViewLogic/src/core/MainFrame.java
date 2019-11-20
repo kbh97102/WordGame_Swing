@@ -22,6 +22,7 @@ public class MainFrame {
 
     public MainFrame(){
         mainFrame = new JFrame();
+        mainFrame.setTitle("Word Game");
         scenePanelArrayHashMap = new HashMap<>();
 
 //        test = Scene.MainPanel.getInstance().getPanel();

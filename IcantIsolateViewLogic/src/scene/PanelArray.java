@@ -19,5 +19,4 @@ public class PanelArray {
     public void setWordData(Vector<String> wordData){
         this.wordData = wordData;
     }
-
 }
