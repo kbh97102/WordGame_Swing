@@ -8,6 +8,10 @@ import scene.WordManage;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.Vector;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Ingame extends PanelArray {
 
@@ -34,6 +38,10 @@ public class Ingame extends PanelArray {
     private ScorePanel scp;
     private LifePanel lp;
     private JButton backToMain;
+
+    private Vector<Enemy> enemies;
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);;
+    private int enemyCount = 0;
     public Ingame(){
 
         init();
@@ -54,8 +62,7 @@ public class Ingame extends PanelArray {
         userImagePanel.setPreferredSize(new Dimension(320, 350));
 
 
-        //sort
-//        scorePanel.
+
         //background
         ingameMainPanel.setBackground(new Color(240,255,240));
         lifePanel.setBackground(new Color(230,230,255));
@@ -71,19 +78,74 @@ public class Ingame extends PanelArray {
 
 
         //add
-
         ingameMainPanel.add(userInputTF, BorderLayout.SOUTH);
         ingameMainPanel.add(testLabel, BorderLayout.NORTH);
 
         ingameRightPanel.add(scorePanel, BorderLayout.NORTH);
         ingameRightPanel.add(forLifeAndUserImage, BorderLayout.CENTER);
         forLifeAndUserImage.add(lifePanel, BorderLayout.NORTH);
-        //ingameRightPanel.add(userImagePanel, BorderLayout.CENTER);
 
         contentPanel.add(ingameRightPanel, BorderLayout.EAST);
         contentPanel.add(ingameMainPanel, BorderLayout.CENTER);
         contentPanel.add(toolBar, BorderLayout.NORTH);
-        //contentPanel.add(btn, BorderLayout.WEST);
+
+        //Thread
+        Runnable GenerateRandomWord = () ->{
+            synchronized (this){
+                int randomIndex = (int)(Math.random()*wordData.size());
+                int randomXpos = (int)(Math.random()*1000);
+                int blindGenerate = (int)(Math.random()*100);
+                if(blindGenerate >= 90){
+                    Enemy blindEnemy = new Enemy("imgpath", wordData.get(randomIndex),randomXpos, true);
+                    blindEnemy.changeBlind(true);
+                    enemies.add(blindEnemy);
+                    //폰트변경
+                }else{
+                    enemies.add(new Enemy("imgpath", wordData.get(randomIndex), randomXpos, true));
+                }
+                ingameMainPanel.add(enemies.get(enemyCount++).getTestWordLabel(), BorderLayout.CENTER);
+            }
+        };
+        Runnable MoveTask = () ->{
+            for(int i=0;i<enemies.size();i++){
+                if(enemies.get(i).getIsAlive()){
+                    //TODO 여기도 수정
+                    if(enemies.get(i).getYPos() >= 800){
+                        enemies.get(i).changeIsAlive(false);
+                    }
+                    else{
+                        enemies.get(i).down();
+                    }
+                }
+            }
+        };
+        Runnable Display = () ->{
+            for(int i=0;i<enemies.size();i++){
+                if(enemies.get(i).getIsAlive()){
+                    if(enemies.get(i).isBlind() && enemies.get(i).getYPos() > 400){
+                        enemies.get(i).setBlind();
+                    }
+                    enemies.get(i).draw();
+                    System.out.println("isWork");
+                }else{
+                    ingameMainPanel.remove(enemies.get(i).getTestWordLabel());
+                    ingameMainPanel.revalidate();
+                    ingameMainPanel.repaint();
+                }
+            }
+        };
+
+        try{
+            scheduledExecutorService.wait();
+        }
+        catch (InterruptedException e1){
+            e1.printStackTrace();
+        }
+
+
+        scheduledExecutorService.scheduleWithFixedDelay(GenerateRandomWord,0,1000, TimeUnit.MILLISECONDS);
+        scheduledExecutorService.scheduleWithFixedDelay(MoveTask,500,500, TimeUnit.MILLISECONDS);
+        scheduledExecutorService.scheduleWithFixedDelay(Display,0,14, TimeUnit.MILLISECONDS);
 
         //Event
         backToMain.addActionListener(event -> sceneChange.accept(Scene.MAIN));
@@ -99,6 +161,7 @@ public class Ingame extends PanelArray {
     }
     private void init(){
         //panel
+        enemies = new Vector<>();
         backToMain = new JButton("BackToMain");
         scp = new ScorePanel();
         lp = new LifePanel();

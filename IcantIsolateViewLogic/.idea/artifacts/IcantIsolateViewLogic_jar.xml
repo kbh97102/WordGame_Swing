@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="IcantIsolateViewLogic:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/IcantIsolateViewLogic_jar</output-path>
+    <root id="archive" name="IcantIsolateViewLogic.jar">
+      <element id="module-output" name="IcantIsolateViewLogic" />
+    </root>
+  </artifact>
+</component>

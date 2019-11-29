@@ -35,7 +35,7 @@ public class WordManagerWindow extends PanelArray{
         buttonPanel.setLayout(new GridLayout(4,1));
         displayPanel.setLayout(new GridLayout(1,2));
 
-        //setting
+        //settingF
         inputTF.requestFocus();
         displayPanel.setPreferredSize(new Dimension(1200,400));
 
