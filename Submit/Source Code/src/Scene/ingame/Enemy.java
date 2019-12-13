@@ -3,6 +3,16 @@ package Scene.ingame;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * word == It is similar to Enemy's Life
+ * WordLabel == display Word // It can be replaced drawString but must consider very hard
+ * Xpos == Enemy's X position( random )
+ * Ypos == Enemy's Y position( default is 0)
+ * heal == when state is true, convert healing Word and if user get this word userLife is increase
+ * blind == when state is true, convert Blind word
+ * alive == Judge Enemy is alive or dead
+ * downSpeed == user can adjust Enemy's downspeed
+ */
 public class Enemy {
     private String word;
     private JLabel wordLabel;

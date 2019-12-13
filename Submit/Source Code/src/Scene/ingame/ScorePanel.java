@@ -13,6 +13,12 @@ public class ScorePanel {
     private int scoreIncreasement = 5;
     private int scoreDecreasement = 5;
 
+    //TODO Change Font Name to English
+    /**
+     *  scoreDecrease will be used if Enemy reached bottom
+     *  If user destroyed Enemy, scoreIncrease work
+     *  Change scoreIncreasement,Decreasement is not implemented
+     */
     public ScorePanel(){
         scorePanel = new JPanel();
         scorePanel.setLayout(new GridLayout(2,1));
@@ -28,7 +34,6 @@ public class ScorePanel {
     public JPanel getScorePanel(){
         return scorePanel;
     }
-
     public void scoreInit(){
         currentScore = 0;
     }
@@ -38,5 +43,6 @@ public class ScorePanel {
     }
     public void scoreDecrease(){
         currentScore -= scoreDecreasement;
+        scoreIntLabel.setText(Integer.toString(currentScore));
     }
 }

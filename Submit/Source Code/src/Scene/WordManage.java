@@ -13,6 +13,12 @@ public class WordManage {
         readFromFile();
         wordFilePath = WordManage.class.getResource("").getPath();
     }
+
+    /**
+     * If instance already exist just return
+     * But instance is NULL, generate and return
+     * @return WordManageInstance
+     */
     public static WordManage getInstance(){
         if(wordManageInstance == null){
             wordManageInstance = new WordManage();
@@ -36,9 +42,14 @@ public class WordManage {
         wordData = newData;
     }
 
+    /**
+     * I don't want filePath be exposed to outside
+     * So Call saveWordToFile and saveWordToFile will call saveFile
+     */
     public void saveWordToFile(){
         saveFile(wordFilePath, wordData);
     }
+
     private void saveFile(String path, Vector<String> wordData){
         File file = new File(path);
 

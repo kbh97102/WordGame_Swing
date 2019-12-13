@@ -4,6 +4,9 @@ import Scene.ingame.Enemy;
 
 import java.util.Vector;
 
+/**
+ *  This Task only perform if Enemy is alive, move to bottom
+ */
 public class MoveTask implements Runnable {
     private Vector<Enemy> enemies;
     private int selectedLevel;

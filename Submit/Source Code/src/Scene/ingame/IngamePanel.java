@@ -65,7 +65,6 @@ public class IngamePanel {
 
     public IngamePanel() {
         init();
-        setWordManagePanel();
         setting();
         userInputTF.requestFocus();
         setToolBar();
@@ -74,12 +73,6 @@ public class IngamePanel {
         makeWordTask = new MakeWordTask(enemies, wordDropPanel, wordData);
         moveTask = new MoveTask(enemies, selectedLevel);
         logicTask = new LogicTask(enemies, goalCount, this::shutdownThread, lp, wordDropPanel, scp,this::continueGame);
-
-
-//        loopService.scheduleWithFixedDelay(makeWordTask, 0, 1000, TimeUnit.MILLISECONDS);
-//        loopService.scheduleWithFixedDelay(moveTask, 0, 1000, TimeUnit.MILLISECONDS);
-//        loopService.scheduleWithFixedDelay(drawTask, 0, 100, TimeUnit.MILLISECONDS);
-//        loopService.scheduleWithFixedDelay(logicTask, 0, 100, TimeUnit.MILLISECONDS);
 
         //test
         levelLabel.setBounds(400,100,280,100);
@@ -96,13 +89,10 @@ public class IngamePanel {
 
 
         //TODO Change panelName and Add UserImage
-//        forLifeAndUserImage.add(wordManagePanel, BorderLayout.CENTER);
         forLifeAndUserImage.add(lifePanel, BorderLayout.NORTH);
-
         contentPanel.add(ingameRightPanel, BorderLayout.EAST);
         contentPanel.add(ingameMainPanel, BorderLayout.CENTER);
         contentPanel.add(toolBar, BorderLayout.NORTH);
-
 
         //event
         userInputTF.addActionListener(this::userInputTFEvent);
@@ -112,7 +102,7 @@ public class IngamePanel {
         for (Enemy enemy : enemies) {
             if (enemy.getAlive() && enemy.getWord().equals(userInput)) {
                 if(enemy.isHeal()){
-                    lp.lifeIncrese();
+                    lp.lifeIncrease();
                 }
                 enemy.changeAlive(false);
                 logicTask.changeGoalCount();
@@ -209,15 +199,14 @@ public class IngamePanel {
         stopButton = new JButton("StopButton");
         startButton.addActionListener(e -> startButtonAction());
         stopButton.addActionListener(e -> stopButtonAction());
-        //TODO 필요없는 인자제거
-        levelUpButton.addActionListener(this::levelUpEvent);
-        levelDownButton.addActionListener(this::levelDownEvent);
+        levelUpButton.addActionListener(e -> levelUpEvent());
+        levelDownButton.addActionListener(e -> levelDownEvent());
         toolBar.add(startButton);
         toolBar.add(stopButton);
         toolBar.add(levelUpButton);
         toolBar.add(levelDownButton);
     }
-    private void levelUpEvent(ActionEvent  e){
+    private void levelUpEvent(){
         if(selectedLevel >= 10){
             selectedLevel = 10;
         }else{
@@ -225,7 +214,7 @@ public class IngamePanel {
         }
         levelLabel.setText("Level = "+Integer.toString(selectedLevel));
     }
-    private void levelDownEvent(ActionEvent e){
+    private void levelDownEvent(){
         if(selectedLevel <= 1){
             selectedLevel = 1;
         }
@@ -267,7 +256,6 @@ public class IngamePanel {
         logicState = loopService.scheduleWithFixedDelay(logicTask, 0, 10, TimeUnit.MILLISECONDS);
     }
 
-
     public void continueGame(){
         //초기화 할 때 뭘 해야될까
         //패널 초기화 enemy초기화
@@ -279,38 +267,5 @@ public class IngamePanel {
 
     public JPanel getContentPanel() {
         return contentPanel;
-    }
-
-    public void setWordManagePanel() {
-        wordManagePanel.setLayout(new GridLayout(1, 2));
-        buttonPanel.setLayout(new GridLayout(3, 1));
-        textFieldPanel.setLayout(new GridLayout(1, 1));
-
-        textFieldPanel.add(textField);
-        buttonPanel.add(addButton);
-        buttonPanel.add(delButton);
-        buttonPanel.add(saveButton);
-
-        addButton.addActionListener(event -> {
-            String input = textField.getText();
-            wordData.add(input);
-            textField.setText("");
-        });
-        delButton.addActionListener(this::deleteButtonEvent);
-        saveButton.addActionListener(event -> {
-            WordManage.getInstance().replaceWordData(wordData);
-        });
-
-        wordManagePanel.add(textFieldPanel);
-        wordManagePanel.add(buttonPanel);
-    }
-    private void deleteButtonEvent(ActionEvent event){
-        String input = textField.getText();
-        if (wordData.contains(input)) {
-            wordData.remove(input);
-        } else {
-            JOptionPane.showMessageDialog(null, "Dose not Exist", "Delete Error", JOptionPane.ERROR_MESSAGE);
-        }
-        textField.setText("");
     }
 }

@@ -12,6 +12,10 @@ public class LifePanel {
     private int lifeIncreasement = 1;
     private int lifeDecreasement = 1;
 
+    /**
+     * If user get HealWord or solve ths problem, lifeIncrease will be working
+     * But user attacked( == Enemy reached bottom) lifeDecrease
+     */
     public LifePanel(){
         lifePanel = new JPanel();
         lifePanel.setLayout(new GridLayout(2,1));
@@ -31,9 +35,9 @@ public class LifePanel {
     public JPanel getLifePanel(){
         return lifePanel;
     }
-    public void lifeIncrese(){
+    public void lifeIncrease(){
         currentLife += lifeIncreasement;
-       
+        lifeIntPanel.setText(Integer.toString(currentLife));
     }
     public void lifeDecrease(){
         currentLife -= lifeDecreasement;

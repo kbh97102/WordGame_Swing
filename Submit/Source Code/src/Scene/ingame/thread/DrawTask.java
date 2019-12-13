@@ -16,6 +16,11 @@ public class DrawTask implements Runnable {
         this.panel = panel;
     }
 
+    /**
+     * This task perform
+     * Condition 1 Enemy is alive
+     *   Draw in panel or remove in panel
+     */
     public void run() {
         try {
             for (Enemy enemy : enemies) {

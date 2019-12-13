@@ -21,6 +21,9 @@ public class WordWindow {
     private JPanel editPanel;
     private JPanel buttonPanel;
 
+    /**
+     * Display wordData and edit
+     */
     private WordWindow(){
         init();
         wordData = WordManage.getInstance().getWordData();
@@ -79,7 +82,7 @@ public class WordWindow {
         }
         //TODO how about use Interface
         else{
-            JOptionPane.showMessageDialog(deleteButton,"Do not Exist", "Delet Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(deleteButton,"Do not Exist", "Delete Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     public static WordWindow getWordWindowInstance(){

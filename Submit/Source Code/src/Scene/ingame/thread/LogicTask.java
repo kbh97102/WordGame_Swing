@@ -36,6 +36,12 @@ public class LogicTask implements Runnable {
      * if Victory goalCount increase and restart
      */
     public void run() {
+        /**
+         * This for-loop perform
+         *   Condition 1 Enemy is Alive
+         *     if Enemy reached bottom kill this Enemy and userLife decrease
+         *   Condition 2 Enemy's blind state is true, Enemy's Y position reached specific position = user can't see Word
+         */
         for (Enemy enemy : enemies) {
             if (enemy.getAlive()) {
                 if (enemy.isReachBottom()) {
@@ -48,12 +54,17 @@ public class LogicTask implements Runnable {
                 }
             }
         }
-
+        /**
+         * User Victory
+         * Stop all task and ask to user
+         * Answer is Yes == don' shutdown program // No == shutdown program
+         */
         if (goalCount == 0) {
             killAll.run();
             if (t1.callOptionPane("Victory! \nReTry?", "You are Winner!") == JOptionPane.YES_OPTION) {
                 //TODO Make Reset / dropPanel, goal, life, score, enemies reset
                 // level up instead of increase goalCount  and retry
+                // Change just show firstScreen
                 goalCount = 10+10;
                 dropPanel.removeAll();
                 lp.changeLife(3);
@@ -67,13 +78,23 @@ public class LogicTask implements Runnable {
         }
 
         //TODO check DynaLIst
+        /**
+         * User is defeat
+         * Stop all task and continue Question is working (we call Baldi)
+         * If user don't want retry shutdown program
+         */
         if (lp.getCurrentLife() == 0) {
             try {
                 killAll.run();
+                /**
+                 * Baldi is the same as continue
+                 * If user solve ths problem at first time, user can play continue
+                 * But can't solve the problem, that's it, game is over
+                 */
                 BaldiWork baldiWork = new BaldiWork(continueGame);
 
+                //TODO User failed continue display OptionPane but now always show this fix it
                 if (t1.callOptionPane("YouDied \nReTry?", "Defeat") == JOptionPane.YES_OPTION) {
-                    //TODO SameWork goalcount==0
                     //retry
                     goalCount = 10;
                     dropPanel.removeAll();
