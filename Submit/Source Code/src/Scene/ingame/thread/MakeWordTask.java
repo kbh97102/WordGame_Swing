@@ -38,7 +38,7 @@ public class MakeWordTask implements Runnable {
             enemies.add(enemy);
             panel.add(enemy.getWordLabel());
         } catch (IndexOutOfBoundsException e) {
-            return;
+            e.printStackTrace();
         }
     }
 }

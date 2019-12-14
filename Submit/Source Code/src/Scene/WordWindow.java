@@ -28,18 +28,20 @@ public class WordWindow {
         init();
         wordData = WordManage.getInstance().getWordData();
 
-        displayWordTA.setBackground(Color.ORANGE);
         //TODO Set ScrollBar in displayWordTA
-//        JScrollBar scrollBar = new JScrollBar(displayWordTA);
+        JScrollPane scrollPane = new JScrollPane(displayWordTA);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         displayWordTA.setEditable(false);
         displayWord();
         displayPanel.setLayout(new BorderLayout());
         displayPanel.add(displayWordTA, BorderLayout.CENTER);
+        displayPanel.add(scrollPane, BorderLayout.EAST);
 
         addButton.addActionListener(this::setAddButtonEvent);
         deleteButton.addActionListener(this::setDeleteButtonEvent);
         saveButton.addActionListener(event -> WordManage.getInstance().saveWordToFile());
-        loadButton.addActionListener(event -> WordManage.getInstance().getWordData());
+        loadButton.addActionListener(event -> wordData = WordManage.getInstance().getWordData());
 
         buttonPanel.setLayout(new GridLayout(1,4,5,1));
         buttonPanel.add(addButton);
@@ -103,6 +105,5 @@ public class WordWindow {
         loadButton = new JButton("Load");
         frame = new JFrame();
         contentPanel = new JPanel();
-
     }
 }

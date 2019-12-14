@@ -69,6 +69,12 @@ public class WordManage {
             e1.printStackTrace();
         }
     }
+
+    /**
+     * Read from file and save Vecter
+     * @param path == filePath
+     * @return wordData
+     */
     private Vector<String> readFile(String path) {
         Vector<String> wordSet = new Vector<>();
 

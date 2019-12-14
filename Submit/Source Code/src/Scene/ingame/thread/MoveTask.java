@@ -26,7 +26,7 @@ public class MoveTask implements Runnable {
                 }
             }
         } catch (IndexOutOfBoundsException e) {
-            return;
+            e.printStackTrace();
         }
     }
 }

@@ -29,8 +29,13 @@ public class LifePanel {
         lifePanel.add(lifeIntPanel);
     }
 
+    public void initLife(){
+        currentLife = 3;
+        lifeIntPanel.setText(Integer.toString(currentLife));
+    }
     public void changeLife(int newLifeCount){
         currentLife = newLifeCount;
+        lifeIntPanel.setText(Integer.toString(currentLife));
     }
     public JPanel getLifePanel(){
         return lifePanel;

@@ -36,6 +36,9 @@ public class ScorePanel {
     }
     public void scoreInit(){
         currentScore = 0;
+        scoreIntLabel.setText(Integer.toString(currentScore));
+        scorePanel.revalidate();
+        scorePanel.repaint();
     }
     public void scoreIncrease(){
         currentScore += scoreIncreasement;

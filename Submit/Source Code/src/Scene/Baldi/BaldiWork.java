@@ -4,7 +4,8 @@ import javax.swing.*;
 
 public class BaldiWork {
 
-    private boolean isFisrtTry;
+    private boolean solved;
+    private boolean isFirstTry;
     private Runnable continueGame;
     public BaldiWork(Runnable continueGame){
         this.continueGame = continueGame;
@@ -15,12 +16,15 @@ public class BaldiWork {
             if(input.equals(questionItem.getAnswer())){
                 //TODO Continue
                 continueGame.run();
+                solved = true;
             }
             else{
-                JOptionPane.showConfirmDialog(null,"You DIed", "you died", JOptionPane.YES_NO_OPTION);
+                solved = false;
             }
         }
     }
-
+    public boolean isSolved(){
+        return solved;
+    }
 
 }

@@ -3,39 +3,47 @@ package Scene.ingame.thread;
 import Scene.Baldi.BaldiWork;
 import Scene.ingame.Enemy;
 import Scene.ingame.LifePanel;
-import Scene.ingame.ScorePanel;
-import Scene.ingame.test;
 
 import javax.swing.*;
 import java.util.Vector;
 
 public class LogicTask implements Runnable {
-    private test t1;
     private Vector<Enemy> enemies;
     private int goalCount;
+    private LifePanel lifePanel;
     private Runnable killAll;
-    private LifePanel lp;
-    private JPanel dropPanel;
-    private ScorePanel scorePanel;
     private Runnable continueGame;
+    private Runnable initializeGameScreen;
 
-    public LogicTask(Vector<Enemy> enemies, int goalCount, Runnable killAll, LifePanel lifePanel, JPanel dropPanel, ScorePanel scorePanel,Runnable continueGame) {
-        this.continueGame = continueGame;
+    public LogicTask(Vector<Enemy> enemies, int goalCount, LifePanel lifePanel, Runnable killAll, Runnable continueGame, Runnable initializeGameScreen) {
         this.enemies = enemies;
         this.goalCount = goalCount;
+        this.lifePanel = lifePanel;
         this.killAll = killAll;
-        this.lp = lifePanel;
-        this.dropPanel = dropPanel;
-        this.scorePanel = scorePanel;
-        t1 = (message, title) -> JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+        this.initializeGameScreen = initializeGameScreen;
+        this.continueGame = continueGame;
     }
-    public void changeGoalCount(){
+
+    public void changeGoalCount() {
         goalCount--;
     }
+
     /**
      * if Victory goalCount increase and restart
      */
-    public void run() {
+    public int callOptionPane(String message, String title) {
+        System.out.println("call");
+        int t1=JOptionPane.showConfirmDialog(null,message,title,JOptionPane.YES_NO_OPTION);
+//        int t1 = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+        return t1;
+    }
+
+    public void setGoalCount(int goalCount) {
+        this.goalCount = goalCount;
+    }
+
+    public synchronized void run() {
+        int test = 0;
         /**
          * This for-loop perform
          *   Condition 1 Enemy is Alive
@@ -46,10 +54,10 @@ public class LogicTask implements Runnable {
             if (enemy.getAlive()) {
                 if (enemy.isReachBottom()) {
                     enemy.changeAlive(false);
-                    lp.lifeDecrease();
+                    lifePanel.lifeDecrease();
                 }
 
-                if(enemy.isBlind() && enemy.getYpos() > 200){
+                if (enemy.isBlind() && enemy.getYpos() > 200) {
                     enemy.getWordLabel().setText("Blind");
                 }
             }
@@ -57,23 +65,16 @@ public class LogicTask implements Runnable {
         /**
          * User Victory
          * Stop all task and ask to user
-         * Answer is Yes == don' shutdown program // No == shutdown program
+         * Answer is Yes == don't shutdown program // No == shutdown program
          */
         if (goalCount == 0) {
             killAll.run();
-            if (t1.callOptionPane("Victory! \nReTry?", "You are Winner!") == JOptionPane.YES_OPTION) {
-                //TODO Make Reset / dropPanel, goal, life, score, enemies reset
-                // level up instead of increase goalCount  and retry
-                // Change just show firstScreen
-                goalCount = 10+10;
-                dropPanel.removeAll();
-                lp.changeLife(3);
-                scorePanel.scoreInit();
-                enemies.removeAllElements();
-                dropPanel.revalidate();
-                dropPanel.repaint();
+            if (callOptionPane("win","winTitle") == JOptionPane.YES_OPTION) {
+                //TODO playGame Automatic
+                initializeGameScreen.run();
             } else {
-                System.exit(0);
+//                System.exit(0);
+                initializeGameScreen.run();
             }
         }
 
@@ -82,29 +83,25 @@ public class LogicTask implements Runnable {
          * User is defeat
          * Stop all task and continue Question is working (we call Baldi)
          * If user don't want retry shutdown program
+         * Baldi is the same as continue
+         * If user solve ths problem at first time, user can play continue
+         * But can't solve the problem, that's it, game is over
          */
-        if (lp.getCurrentLife() == 0) {
+        if (lifePanel.getCurrentLife() <= 0) {
             try {
+                boolean bb = false;
                 killAll.run();
-                /**
-                 * Baldi is the same as continue
-                 * If user solve ths problem at first time, user can play continue
-                 * But can't solve the problem, that's it, game is over
-                 */
                 BaldiWork baldiWork = new BaldiWork(continueGame);
-
-                //TODO User failed continue display OptionPane but now always show this fix it
-                if (t1.callOptionPane("YouDied \nReTry?", "Defeat") == JOptionPane.YES_OPTION) {
-                    //retry
-                    goalCount = 10;
-                    dropPanel.removeAll();
-                    lp.changeLife(3);
-                    scorePanel.scoreInit();
-                    enemies.removeAllElements();
-                    dropPanel.revalidate();
-                    dropPanel.repaint();
-                } else {
-                    System.exit(0);
+                //TODO User failed to continue display OptionPane but now always show this fix it
+                if (!baldiWork.isSolved()) {
+                    if (callOptionPane("YouDied ReTry?", "Defeat") == JOptionPane.YES_OPTION) {
+                        System.out.println(bb);
+                        System.out.println("dead");
+                        initializeGameScreen.run();
+                    } else {
+                        System.out.println(bb);
+                        initializeGameScreen.run();
+                    }
                 }
             } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();

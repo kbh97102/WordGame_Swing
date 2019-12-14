@@ -55,7 +55,7 @@ public class IngamePanel {
     private JToolBar toolBar;
     private Vector<String> wordData;
     private Vector<Enemy> enemies;
-    private int goalCount = 3;
+    private int goalCount=1;
     private JButton startButton = new JButton("start");
     private int selectedLevel = 1;
     private JLabel levelLabel;
@@ -63,6 +63,9 @@ public class IngamePanel {
 
     //TODO toolbar Color, Frame Title Color Change
 
+    /**
+     *
+     */
     public IngamePanel() {
         init();
         setting();
@@ -72,9 +75,8 @@ public class IngamePanel {
         drawTask = new DrawTask(enemies, wordDropPanel);
         makeWordTask = new MakeWordTask(enemies, wordDropPanel, wordData);
         moveTask = new MoveTask(enemies, selectedLevel);
-        logicTask = new LogicTask(enemies, goalCount, this::shutdownThread, lp, wordDropPanel, scp,this::continueGame);
+        logicTask = new LogicTask(enemies, goalCount,lp,this::shutdownThread,this::continueGame, this::initializeGameScreen);
 
-        //test
         levelLabel.setBounds(400,100,280,100);
         levelLabel.setFont(new Font("Gothic", Font.BOLD,50));
         String testtext = "Level = " + Integer.toString(selectedLevel);
@@ -233,22 +235,28 @@ public class IngamePanel {
     }
 
     public void shutdownThread(){
-        moveState.cancel(true);
-        makeWordState.cancel(true);
-        logicState.cancel(true);
-        drawState.cancel(true);
-        loopService.shutdown();
+        try{
+            moveState.cancel(true);
+            makeWordState.cancel(true);
+            logicState.cancel(true);
+            drawState.cancel(true);
+            loopService.shutdown();
+        }
+        catch (NullPointerException e){
+            System.out.println("Thread is not allocated");
+        }
     }
 
     public void startButtonAction(){
         wordDropPanel.remove(levelLabel);
         wordDropPanel.repaint();
-        //TODO ScheduledFuture learn
         startThread();
     }
 
     public void startThread(){
         moveTask.setSelectedLevel(selectedLevel);
+        goalCount = selectedLevel * 1;
+        logicTask.setGoalCount(goalCount);
         loopService = new ScheduledThreadPoolExecutor(4);
         makeWordState = loopService.scheduleWithFixedDelay(makeWordTask, 0, 3000/selectedLevel, TimeUnit.MILLISECONDS);
         moveState = loopService.scheduleWithFixedDelay(moveTask, 0, 100, TimeUnit.MILLISECONDS);
@@ -260,11 +268,24 @@ public class IngamePanel {
         //초기화 할 때 뭘 해야될까
         //패널 초기화 enemy초기화
         wordDropPanel.removeAll();
+        wordDropPanel.revalidate();
+        wordDropPanel.repaint();
         enemies.removeAllElements();
         lp.changeLife(1);
         startThread();
     }
 
+    public void initializeGameScreen(){
+        goalCount = selectedLevel * 1;
+        logicTask.setGoalCount(goalCount);
+        wordDropPanel.removeAll();
+        wordDropPanel.add(levelLabel);
+        wordDropPanel.revalidate();
+        wordDropPanel.repaint();
+        scp.scoreInit();
+        lp.initLife();
+        enemies.removeAllElements();
+    }
     public JPanel getContentPanel() {
         return contentPanel;
     }
