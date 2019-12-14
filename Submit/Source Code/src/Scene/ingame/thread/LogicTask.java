@@ -3,6 +3,7 @@ package Scene.ingame.thread;
 import Scene.Baldi.BaldiWork;
 import Scene.ingame.Enemy;
 import Scene.ingame.LifePanel;
+import core.MainFrame;
 
 import javax.swing.*;
 import java.util.Vector;
@@ -14,14 +15,18 @@ public class LogicTask implements Runnable {
     private Runnable killAll;
     private Runnable continueGame;
     private Runnable initializeGameScreen;
+    private Runnable victoryScene;
+    private Runnable defeatScene;
 
-    public LogicTask(Vector<Enemy> enemies, int goalCount, LifePanel lifePanel, Runnable killAll, Runnable continueGame, Runnable initializeGameScreen) {
+    public LogicTask(Vector<Enemy> enemies, int goalCount, LifePanel lifePanel, Runnable killAll, Runnable continueGame, Runnable initializeGameScreen, Runnable victoryScene,Runnable defeatScene) {
         this.enemies = enemies;
         this.goalCount = goalCount;
         this.lifePanel = lifePanel;
         this.killAll = killAll;
         this.initializeGameScreen = initializeGameScreen;
         this.continueGame = continueGame;
+        this.victoryScene = victoryScene;
+        this.defeatScene = defeatScene;
     }
 
     public void changeGoalCount() {
@@ -69,13 +74,7 @@ public class LogicTask implements Runnable {
          */
         if (goalCount == 0) {
             killAll.run();
-            if (callOptionPane("win","winTitle") == JOptionPane.YES_OPTION) {
-                //TODO playGame Automatic
-                initializeGameScreen.run();
-            } else {
-//                System.exit(0);
-                initializeGameScreen.run();
-            }
+            victoryScene.run();
         }
 
         //TODO check DynaLIst
@@ -88,24 +87,9 @@ public class LogicTask implements Runnable {
          * But can't solve the problem, that's it, game is over
          */
         if (lifePanel.getCurrentLife() <= 0) {
-            try {
-                boolean bb = false;
-                killAll.run();
-                BaldiWork baldiWork = new BaldiWork(continueGame);
-                //TODO User failed to continue display OptionPane but now always show this fix it
-                if (!baldiWork.isSolved()) {
-                    if (callOptionPane("YouDied ReTry?", "Defeat") == JOptionPane.YES_OPTION) {
-                        System.out.println(bb);
-                        System.out.println("dead");
-                        initializeGameScreen.run();
-                    } else {
-                        System.out.println(bb);
-                        initializeGameScreen.run();
-                    }
-                }
-            } catch (IndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
+            killAll.run();
+            defeatScene.run();
+            //TODO Input Baldi
         }
     }
 }

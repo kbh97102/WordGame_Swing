@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.event.KeyAdapter;
 
 public class MainFrame {
-    private JFrame mainFrame;
+    private static JFrame mainFrame;
     private IngamePanel ingamePanel = new IngamePanel();
     private JMenuBar menuBar;
     private JMenu game;
@@ -47,5 +47,8 @@ public class MainFrame {
         menuBar.add(game);
         menuBar.add(menu2);
         mainFrame.setJMenuBar(menuBar);
+    }
+    public static void requestShowConfirmDiolog(String message, String title){
+        JOptionPane.showConfirmDialog(mainFrame,message, title, JOptionPane.YES_NO_OPTION);
     }
 }

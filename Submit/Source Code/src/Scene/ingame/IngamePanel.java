@@ -28,6 +28,8 @@ public class IngamePanel {
     private JPanel wordManagePanel;
     private JPanel buttonPanel;
     private JPanel textFieldPanel;
+    private VictoryPanel victoryPanel = new VictoryPanel();
+    private DefeatPanel defeatPanel = new DefeatPanel();
 
     //button
     private JTextField textField;
@@ -75,7 +77,7 @@ public class IngamePanel {
         drawTask = new DrawTask(enemies, wordDropPanel);
         makeWordTask = new MakeWordTask(enemies, wordDropPanel, wordData);
         moveTask = new MoveTask(enemies, selectedLevel);
-        logicTask = new LogicTask(enemies, goalCount,lp,this::shutdownThread,this::continueGame, this::initializeGameScreen);
+        logicTask = new LogicTask(enemies, goalCount,lp,this::shutdownThread,this::continueGame, this::initializeGameScreen,this::victoryScene,this::defeatScene);
 
         levelLabel.setBounds(400,100,280,100);
         levelLabel.setFont(new Font("Gothic", Font.BOLD,50));
@@ -265,8 +267,10 @@ public class IngamePanel {
     }
 
     public void continueGame(){
-        //초기화 할 때 뭘 해야될까
-        //패널 초기화 enemy초기화
+        ingameMainPanel.remove(defeatPanel.getContentpanel());
+        ingameMainPanel.add(wordDropPanel);
+        ingameMainPanel.revalidate();
+        ingameMainPanel.repaint();
         wordDropPanel.removeAll();
         wordDropPanel.revalidate();
         wordDropPanel.repaint();
@@ -285,6 +289,39 @@ public class IngamePanel {
         scp.scoreInit();
         lp.initLife();
         enemies.removeAllElements();
+    }
+    public void victoryScene(){
+//        contentPanel.removeAll();
+//        contentPanel.add(new VictoryPanel().getContentpanel(), BorderLayout.CENTER);
+//        contentPanel.revalidate();
+//        contentPanel.repaint();
+        ingameMainPanel.remove(wordDropPanel);
+        ingameMainPanel.add(victoryPanel.getContentpanel(),BorderLayout.CENTER);
+        ingameMainPanel.revalidate();
+        ingameMainPanel.repaint();
+        victoryPanel.setChangeScene(this::victoryReStart);
+    }
+    public void victoryReStart(){
+        ingameMainPanel.remove(victoryPanel.getContentpanel());
+        ingameMainPanel.add(wordDropPanel);
+        ingameMainPanel.revalidate();
+        ingameMainPanel.repaint();
+        initializeGameScreen();
+    }
+    public void defeatScene(){
+        ingameMainPanel.remove(wordDropPanel);
+        ingameMainPanel.add(defeatPanel.getContentpanel(),BorderLayout.CENTER);
+        ingameMainPanel.revalidate();
+        ingameMainPanel.repaint();
+        defeatPanel.setChangeScene(this::defeatReStart);
+        defeatPanel.setContinueGame(this::continueGame);
+    }
+    public void defeatReStart(){
+        ingameMainPanel.remove(defeatPanel.getContentpanel());
+        ingameMainPanel.add(wordDropPanel);
+        ingameMainPanel.revalidate();
+        ingameMainPanel.repaint();
+        initializeGameScreen();
     }
     public JPanel getContentPanel() {
         return contentPanel;
