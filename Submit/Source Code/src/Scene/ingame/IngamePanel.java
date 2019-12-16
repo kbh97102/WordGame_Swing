@@ -5,7 +5,9 @@ import Scene.ingame.thread.DrawTask;
 import Scene.ingame.thread.LogicTask;
 import Scene.ingame.thread.MakeWordTask;
 import Scene.ingame.thread.MoveTask;
+import music.Music;
 
+import javax.sound.sampled.AudioInputStream;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -57,10 +59,15 @@ public class IngamePanel {
     private JToolBar toolBar;
     private Vector<String> wordData;
     private Vector<Enemy> enemies;
-    private int goalCount=1;
+    private int goalCount=10;
     private JButton startButton = new JButton("start");
     private int selectedLevel = 1;
     private JLabel levelLabel;
+
+    //Music
+    private Music backgroundMusic;
+    private Music successSoundEffect;
+    private Music failedSoundEffect;
 
 
     //TODO toolbar Color, Frame Title Color Change
@@ -73,6 +80,10 @@ public class IngamePanel {
         setting();
         userInputTF.requestFocus();
         setToolBar();
+        setMusic();
+
+
+//        backgroundMusic.startLoopMusic();
 
 
         drawTask = new DrawTask(enemies, wordDropPanel);
@@ -102,17 +113,33 @@ public class IngamePanel {
         //event
         userInputTF.addActionListener(this::userInputTFEvent);
     }
+    private void setMusic(){
+        backgroundMusic = new Music("Resource/Music/Background.wav");
+        successSoundEffect = new Music("Resource/Music/nice.wav");
+        failedSoundEffect = new Music("Resource/Music/dirty.wav");
+    }
     private void userInputTFEvent(ActionEvent e){
+        boolean isHit = false;
         String userInput = userInputTF.getText();
         for (Enemy enemy : enemies) {
             if (enemy.getAlive() && enemy.getWord().equals(userInput)) {
+                isHit = true;
                 if(enemy.isHeal()){
                     lp.lifeIncrease();
                 }
                 enemy.changeAlive(false);
                 logicTask.changeGoalCount();
                 scp.scoreIncrease();
+                break;
             }
+        }
+//        AudioInputStream
+        if(isHit){
+            successSoundEffect.startMusic();
+            isHit = false;
+        }
+        else{
+            failedSoundEffect.startMusic();
         }
         userInputTF.setText("");
     }
@@ -135,7 +162,7 @@ public class IngamePanel {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Image image = new ImageIcon("Image/MainImage.jpg").getImage();
+                Image image = new ImageIcon("Resource/Image/MainImage.jpg").getImage();
                 g.drawImage(image,0,0,null);
             }
         };
@@ -266,7 +293,7 @@ public class IngamePanel {
 
     public void startThread(){
         moveTask.setSelectedLevel(selectedLevel);
-        goalCount = selectedLevel * 1;
+        goalCount = selectedLevel * 10;
         logicTask.setGoalCount(goalCount);
         loopService = new ScheduledThreadPoolExecutor(4);
         makeWordState = loopService.scheduleWithFixedDelay(makeWordTask, 0, 3000/selectedLevel, TimeUnit.MILLISECONDS);
@@ -289,7 +316,7 @@ public class IngamePanel {
     }
 
     public void initializeGameScreen(){
-        goalCount = selectedLevel * 1;
+        goalCount = selectedLevel * 10;
         logicTask.setGoalCount(goalCount);
         wordDropPanel.removeAll();
         wordDropPanel.add(levelLabel);
@@ -300,10 +327,6 @@ public class IngamePanel {
         enemies.removeAllElements();
     }
     public void victoryScene(){
-//        contentPanel.removeAll();
-//        contentPanel.add(new VictoryPanel().getContentpanel(), BorderLayout.CENTER);
-//        contentPanel.revalidate();
-//        contentPanel.repaint();
         ingameMainPanel.remove(wordDropPanel);
         ingameMainPanel.add(victoryPanel.getContentpanel(),BorderLayout.CENTER);
         ingameMainPanel.revalidate();
@@ -332,6 +355,7 @@ public class IngamePanel {
         ingameMainPanel.repaint();
         initializeGameScreen();
     }
+
     public JPanel getContentPanel() {
         return contentPanel;
     }

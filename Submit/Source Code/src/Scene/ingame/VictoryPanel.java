@@ -20,13 +20,11 @@ public class VictoryPanel {
         contentpanel.setLayout(new GridLayout(1,3));
         b1 = new JButton("Restart");
         b2 = new JButton("Exit");
-        b3 = new JButton("Fuck you");
 
         b2.addActionListener(event -> System.exit(0));
         b1.addActionListener(event -> changeScene.run());
         contentpanel.add(b1);
         contentpanel.add(b2);
-        contentpanel.add(b3);
 
     }
     public void setChangeScene(Runnable changeScene){
