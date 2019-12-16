@@ -74,6 +74,7 @@ public class IngamePanel {
         userInputTF.requestFocus();
         setToolBar();
 
+
         drawTask = new DrawTask(enemies, wordDropPanel);
         makeWordTask = new MakeWordTask(enemies, wordDropPanel, wordData);
         moveTask = new MoveTask(enemies, selectedLevel);
@@ -130,7 +131,14 @@ public class IngamePanel {
         lifePanel = lp.getLifePanel();
         userImagePanel = new JPanel();
         forLifeAndUserImage = new JPanel();
-        wordDropPanel = new JPanel();
+        wordDropPanel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Image image = new ImageIcon("Image/MainImage.jpg").getImage();
+                g.drawImage(image,0,0,null);
+            }
+        };
         textFieldPanel = new JPanel();
         wordManagePanel = new JPanel();
         buttonPanel = new JPanel();
@@ -167,6 +175,7 @@ public class IngamePanel {
         forLifeAndUserImage.setLayout(new BorderLayout());
         contentPanel.setLayout(new BorderLayout());
         wordDropPanel.setLayout(null);
+
 
         //setSize
         ingameRightPanel.setPreferredSize(new Dimension(320, 720));
