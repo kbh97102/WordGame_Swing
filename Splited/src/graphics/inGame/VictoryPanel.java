@@ -3,6 +3,7 @@ package graphics.inGame;
 import graphics.Baldi.BaldiWork;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class VictoryPanel extends JPanel {
     private JButton nextLevelButton;
@@ -13,6 +14,7 @@ public class VictoryPanel extends JPanel {
         initialize();
         add(nextLevelButton);
         add(exitButton);
+        this.setPreferredSize(new Dimension(1280,720));
 
         nextLevelButton.addActionListener(e -> nextLevel.run());
         exitButton.addActionListener(event -> System.exit(0));
@@ -23,5 +25,12 @@ public class VictoryPanel extends JPanel {
     }
     public void setNextLevel(Runnable nextLevel){
         this.nextLevel = nextLevel;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Image image = new ImageIcon("Resource/Image/victory.jpg").getImage();
+        g.drawImage(image,0,0,null);
     }
 }

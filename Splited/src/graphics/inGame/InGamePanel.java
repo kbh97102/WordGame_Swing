@@ -1,6 +1,7 @@
 package graphics.inGame;
 
 import logic.GameLogic;
+import logic.Scene;
 import logic.UpdateLife;
 import logic.UpdateScore;
 
@@ -23,6 +24,8 @@ public class InGamePanel extends JPanel{
     private JButton levelDownButton = new JButton("LevelDown");
     private JTextField userInputTF;
     private Runnable displayLevel;
+
+    private Scene scene;
 
     public InGamePanel(){
         initialize();
@@ -49,12 +52,17 @@ public class InGamePanel extends JPanel{
         updateScoreLife = infoPanel.getUpdateScoreLife();
         displayLevel = () -> infoPanel.updateLevel();
         gameLogic.setIngamePanel(contentPanel);
+        gameLogic.setPainting(this::painting);
+        gameLogic.setIngamePanel(this);
     }
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Image image = new ImageIcon("Resource/Image/back.jpg").getImage();
-//        g.drawImage(image,0,0,null);
+        Image backgroundImage = new ImageIcon("Resource/Image/back.jpg").getImage();
+        painting(g, backgroundImage);
+    }
+    public void painting(Graphics g, Image image){
+        g.drawImage(image,0,0,null);
     }
     private void setToolBar(){
         toolBar.add(startButton);

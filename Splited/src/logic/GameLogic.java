@@ -8,7 +8,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GameLogic {
     private Vector<String> wordData = new Vector<>();
@@ -29,7 +31,8 @@ public class GameLogic {
     private VictoryPanel victoryPanel = new VictoryPanel();
     private Music successEffectSound;
     private Music faliEffectSound;
-
+    private BiConsumer<Graphics,Image> painting;
+    private Image victoryImage = new ImageIcon("Resource/Image/victory.jpg").getImage();
 
 
     private int loopDelay = 1000;
@@ -42,7 +45,8 @@ public class GameLogic {
 //        enemies = Collections.synchronizedList(new LinkedList<>());
         //TODO Study synchreonizedList and ConcurrentLinkedQueue
         enemies = new ConcurrentLinkedQueue<>();
-        goal = level*10;
+//        goal = level*10;
+        goal = 1;
     }
     private void initialize(){
         defeatPanel.setReStart(() -> newGame(level));
@@ -60,7 +64,9 @@ public class GameLogic {
     public void setWordDropPanel(JPanel dropPanel) {
         this.wordDropPanel = dropPanel;
     }
-
+    public void setPainting(BiConsumer<Graphics,Image> painting){
+        this.painting = painting;
+    }
     public void generateWord() {
         int randomIndex = (int) (Math.random() * wordData.size());
         int randomXpos = (int) (Math.random() * 800);
@@ -78,6 +84,7 @@ public class GameLogic {
     }
 
     public void moveWord() {
+        checkGoalCount();
         for (Enemy enemy : enemies) {
             isCollide(enemy);
             checkBlind(enemy);
@@ -125,6 +132,7 @@ public class GameLogic {
         if(goal <= goalCount){
             shutdownThread();
             wordDropPanel.removeAll();
+            painting.accept(ingamePanel.getGraphics(),victoryImage);
             wordDropPanel.setLayout(new FlowLayout());
             wordDropPanel.add(victoryPanel);
             wordDropPanel.revalidate();
@@ -134,9 +142,10 @@ public class GameLogic {
     private void runThread(){
         service = new ScheduledThreadPoolExecutor(3);
         generateWordFuture = service.scheduleAtFixedRate(this::generateWord,0,loopDelay, TimeUnit.MILLISECONDS);
-        moveWordFuture = service.scheduleAtFixedRate(this::moveWord,0,loopDelay/10, TimeUnit.MILLISECONDS);
-        drawWordFuture = service.scheduleAtFixedRate(this::draw,0,loopDelay/10, TimeUnit.MILLISECONDS);
+        moveWordFuture = service.scheduleAtFixedRate(this::moveWord,0,loopDelay/60, TimeUnit.MILLISECONDS);
+        drawWordFuture = service.scheduleAtFixedRate(this::draw,0,loopDelay/60, TimeUnit.MILLISECONDS);
     }
+
     public void continueGame(){
         updateLife.increaseLife();
         updateScoreLIfe.run();
@@ -181,7 +190,6 @@ public class GameLogic {
         }
     }
     public void checkAnswer(String input){
-        checkGoalCount();
         boolean isHit = false;
         for(Enemy enemy : enemies){
             if(enemy.getWord().equals(input)){

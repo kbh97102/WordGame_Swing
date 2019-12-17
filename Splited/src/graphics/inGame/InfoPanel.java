@@ -75,15 +75,19 @@ public class InfoPanel {
     public void increaseLevel(){
         if(selectedLevel >= 10){
             selectedLevel = 10;
+        }else{
+            selectedLevel++;
         }
-        selectedLevel++;
+
         level.setText(Integer.toString(selectedLevel));
     }
     public void decreaseLevel(){
         if(selectedLevel <= 1){
             selectedLevel = 1;
+        }else{
+            selectedLevel--;
         }
-        selectedLevel--;
+
         level.setText(Integer.toString(selectedLevel));
     }
     public void updateLevel(){
